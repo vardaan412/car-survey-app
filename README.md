@@ -37,7 +37,7 @@ cd car-survey-app
 
 ```bash
 # Make sure Docker is installed and running
-docker-compose up --build
+docker-compose up --build -d
 ```
 
 Then open:
