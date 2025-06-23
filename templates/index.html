@@ -1,19 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Car Survey Form</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Survey - Ultra Modern</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      width: 90%;
+      max-width: 800px;
+      margin-top: 2rem;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 2.5rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    input, select, button {
+      padding: 0.8rem;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      background: #1fddff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0acffe;
+    }
+
+    canvas {
+      margin-top: 2rem;
+    }
+
+    .animation {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="form-container">
-        <h1>🚗 Car Survey Form</h1>
-        <form method="POST">
-            <input type="text" name="name" placeholder="Enter your name" required>
-            <input type="text" name="fav_car" placeholder="Favorite Car" required>
-            <input type="text" name="own_car" placeholder="Which Car Do You Have?" required>
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+  <h1>🚗 Car Survey 3000</h1>
+
+  <div class="glass">
+    <form id="carForm">
+      <input type="text" id="name" placeholder="Enter Your Name" required>
+      <select id="favCar" required>
+        <option value="">Favorite Car</option>
+        <option value="Tesla">Tesla</option>
+        <option value="BMW">BMW</option>
+        <option value="Lamborghini">Lamborghini</option>
+        <option value="Porsche">Porsche</option>
+      </select>
+      <select id="ownCar" required>
+        <option value="">Do You Own a Car?</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+    <canvas id="chart"></canvas>
+  </div>
+
+  <div class="animation">
+    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_puciaact.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>
+  </div>
+
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <script>
+    const form = document.getElementById('carForm');
+    const chartEl = document.getElementById('chart');
+    let dataStore = {
+      Tesla: 0,
+      BMW: 0,
+      Lamborghini: 0,
+      Porsche: 0
+    };
+
+    const chart = new Chart(chartEl, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(dataStore),
+        datasets: [{
+          label: 'Favorite Cars Count',
+          data: Object.values(dataStore),
+          backgroundColor: ['#1abc9c', '#3498db', '#9b59b6', '#e67e22'],
+          borderRadius: 10
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const favCar = document.getElementById('favCar').value;
+      if (favCar) {
+        dataStore[favCar]++;
+        chart.data.datasets[0].data = Object.values(dataStore);
+        chart.update();
+        alert('🚀 Response Recorded!');
+        form.reset();
+      }
+    });
+  </script>
 </body>
+
 </html>
